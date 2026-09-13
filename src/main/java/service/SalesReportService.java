@@ -35,5 +35,17 @@ public class SalesReportService {
         return bestSellingProduct;
     }
 
+    public ProductSale findHighestRevenueProduct(List<ProductSale> productSales) {
+        if (productSales.isEmpty()) {
+            return null;
+        }
+        ProductSale highestRevenueProduct = productSales.get(0);
+        for (ProductSale productSale : productSales) {
+            if (calculateRevenue(productSale) > calculateRevenue(highestRevenueProduct)) {
+                highestRevenueProduct = productSale;
+            }
+        }
+        return highestRevenueProduct;
+    }
 
 }
