@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
@@ -34,9 +36,8 @@ public class Main {
         String csvFilePath = args[0];
         String outputMethod = args[1].toLowerCase();
 
-        List<ProductSale> salesList = new ArrayList<>();
-
         try {
+            List<ProductSale> salesList = new ArrayList<>();
             BufferedReader br = new BufferedReader(new FileReader(csvFilePath));
             String line;
             boolean isHeader = true;
@@ -65,7 +66,47 @@ public class Main {
                 return;
             }
 
-            System.out.println("Successfully loaded " + salesList.size() + " products.");
+            StringBuilder sb = new StringBuilder();
+            sb.append("============================================\n");
+            sb.append("PRODUCT SALES SUMMARY REPORT\n");
+            sb.append("============================================\n\n");
+            sb.append("--- Revenue Per Product ---\n");
+
+            Map<String, Double> categoryRevenueMap = new LinkedHashMap<>();
+            ProductSale bestSeller = salesList.get(0);
+            ProductSale highestRevenue = salesList.get(0);
+            double grandTotal = 0.0;
+
+            for (ProductSale sale : salesList) {
+                double revenue = sale.getTotalRevenue();
+                grandTotal += revenue;
+
+                sb.append(String.format("%-6s %-18s %-12s $%.2f\n",
+                        sale.productId, sale.productName, sale.category, revenue));
+
+                categoryRevenueMap.put(sale.category, categoryRevenueMap.getOrDefault(sale.category, 0.0) + revenue);
+
+                if (sale.quantitySold > bestSeller.quantitySold) {
+                    bestSeller = sale;
+                }
+
+                if (revenue > highestRevenue.getTotalRevenue()) {
+                    highestRevenue = sale;
+                }
+            }
+
+            sb.append("\n--- Revenue Per Category ---\n");
+            for (Map.Entry<String, Double> entry : categoryRevenueMap.entrySet()) {
+                sb.append(String.format("%-15s : $%.2f\n", entry.getKey(), entry.getValue()));
+            }
+
+            sb.append("\n--- Highlights ---\n");
+            sb.append(String.format("Best-Selling Product   : %s (%d units)\n", bestSeller.productName, bestSeller.quantitySold));
+            sb.append(String.format("Highest Revenue        : %s ($%.2f)\n", highestRevenue.productName, highestRevenue.getTotalRevenue()));
+            sb.append(String.format("Grand Total Revenue    : $%.2f\n", grandTotal));
+
+            String reportContent = sb.toString();
+            System.out.print(reportContent);
 
         } catch (Exception e) {
             System.err.println("Error processing sales report: " + e.getMessage());
