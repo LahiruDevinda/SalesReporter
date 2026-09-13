@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public abstract class FileOutput implements OutputStrategy {
+public class FileOutput implements OutputStrategy {
     private final String filePath;
 
     public FileOutput(String filePath) {
