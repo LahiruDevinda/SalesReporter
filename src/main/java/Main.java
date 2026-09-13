@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -106,7 +108,21 @@ public class Main {
             sb.append(String.format("Grand Total Revenue    : $%.2f\n", grandTotal));
 
             String reportContent = sb.toString();
-            System.out.print(reportContent);
+
+            if ("console".equals(outputMethod)) {
+                System.out.print(reportContent);
+            } else if ("file".equals(outputMethod)) {
+                if (args.length < 3) {
+                    System.err.println("Error: Output file path is required when output-method is 'file'.");
+                    return;
+                }
+                PrintWriter out = new PrintWriter(new FileWriter(args[2]));
+                out.print(reportContent);
+                out.close();
+                System.out.println("Report successfully saved to " + args[2]);
+            } else {
+                System.err.println("Error: Invalid output method. Use 'console' or 'file'.");
+            }
 
         } catch (Exception e) {
             System.err.println("Error processing sales report: " + e.getMessage());
