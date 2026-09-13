@@ -83,7 +83,7 @@ public class Main {
                 double revenue = sale.getTotalRevenue();
                 grandTotal += revenue;
 
-                sb.append(String.format("%-6s %-18s %-12s $%.2f\n",
+                sb.append(String.format("%-6s %-18s %-12s LKR %.2f\n",
                         sale.productId, sale.productName, sale.category, revenue));
 
                 categoryRevenueMap.put(sale.category, categoryRevenueMap.getOrDefault(sale.category, 0.0) + revenue);
@@ -99,13 +99,13 @@ public class Main {
 
             sb.append("\n--- Revenue Per Category ---\n");
             for (Map.Entry<String, Double> entry : categoryRevenueMap.entrySet()) {
-                sb.append(String.format("%-15s : $%.2f\n", entry.getKey(), entry.getValue()));
+                sb.append(String.format("%-15s : LKR %.2f\n", entry.getKey(), entry.getValue()));
             }
 
             sb.append("\n--- Highlights ---\n");
             sb.append(String.format("Best-Selling Product   : %s (%d units)\n", bestSeller.productName, bestSeller.quantitySold));
-            sb.append(String.format("Highest Revenue        : %s ($%.2f)\n", highestRevenue.productName, highestRevenue.getTotalRevenue()));
-            sb.append(String.format("Grand Total Revenue    : $%.2f\n", grandTotal));
+            sb.append(String.format("Highest Revenue        : %s (LKR %.2f)\n", highestRevenue.productName, highestRevenue.getTotalRevenue()));
+            sb.append(String.format("Grand Total Revenue    : LKR %.2f\n", grandTotal));
 
             String reportContent = sb.toString();
 
