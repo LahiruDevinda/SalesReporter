@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
 
     static class ProductSale {
@@ -28,5 +33,42 @@ public class Main {
 
         String csvFilePath = args[0];
         String outputMethod = args[1].toLowerCase();
+
+        List<ProductSale> salesList = new ArrayList<>();
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(csvFilePath));
+            String line;
+            boolean isHeader = true;
+
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+
+                String[] columns = line.split(",");
+                String productId = columns[0].trim();
+                String productName = columns[1].trim();
+                String category = columns[2].trim();
+                int quantitySold = Integer.parseInt(columns[3].trim());
+                double unitPrice = Double.parseDouble(columns[4].trim());
+
+                salesList.add(new ProductSale(productId, productName, category, quantitySold, unitPrice));
+            }
+            br.close();
+
+            if (salesList.isEmpty()) {
+                System.err.println("Error: CSV file contains no data.");
+                return;
+            }
+
+            System.out.println("Successfully loaded " + salesList.size() + " products.");
+
+        } catch (Exception e) {
+            System.err.println("Error processing sales report: " + e.getMessage());
+        }
     }
 }
