@@ -26,7 +26,7 @@ public class SalesReportService {
         if (productSales.isEmpty()) {
             return null;
         }
-        ProductSale bestSellingProduct = productSales.get(0);
+        ProductSale bestSellingProduct = productSales.getFirst();
         for (ProductSale productSale : productSales) {
             if (productSale.getQuantitySold() > bestSellingProduct.getQuantitySold()) {
                 bestSellingProduct = productSale;
@@ -39,7 +39,7 @@ public class SalesReportService {
         if (productSales.isEmpty()) {
             return null;
         }
-        ProductSale highestRevenueProduct = productSales.get(0);
+        ProductSale highestRevenueProduct = productSales.getFirst();
         for (ProductSale productSale : productSales) {
             if (calculateRevenue(productSale) > calculateRevenue(highestRevenueProduct)) {
                 highestRevenueProduct = productSale;
