@@ -48,4 +48,16 @@ public class SalesReportService {
         return highestRevenueProduct;
     }
 
+    public double calculateTotalRevenue(List<ProductSale> productSales) {
+        double totalRevenue = 0;
+        if (productSales.isEmpty()) {
+            return totalRevenue;
+        }
+
+        for (ProductSale productSale : productSales) {
+            totalRevenue += calculateRevenue(productSale);
+        }
+        return totalRevenue;
+    }
+
 }
